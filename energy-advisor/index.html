@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Energy Advisor</title>
+  <meta name="claude:viewport-fit-sides" content="cover">
+  <meta name="description" content="Energy Advisor watches your home's tariff, temperatures and appliances and suggests small changes that cut your electricity bill.">
+  <meta property="og:title" content="Energy Advisor">
+  <meta property="og:description" content="Smart energy-saving alerts for peak tariffs, night heating and free cooling.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script>
+    try { var t = localStorage.getItem('ea:theme'); if (t) document.documentElement.setAttribute('data-theme', JSON.parse(t)); } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-row">
+      <a class="brand" href="#home" aria-label="Energy Advisor home">
+        <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="currentColor"/><path d="M36 8 16 36h14l-4 20 22-30H34z" fill="var(--accent-ink)"/></svg>
+        <span class="brand-text">Energy Advisor<small>Intelligent efficiency hub</small></span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="#home" data-nav="home">Home</a>
+        <a href="#dashboard" data-nav="dashboard">Dashboard</a>
+        <a href="#insights" data-nav="insights">Insights</a>
+        <a href="#rules" data-nav="rules">Rules</a>
+        <a href="#about" data-nav="about">About</a>
+      </nav>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch colour theme">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- HOME -->
+    <section id="view-home" class="view">
+      <div class="wrap hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Home energy, made simple</p>
+          <h1>Run your home on the cheap side of the clock.</h1>
+          <p class="lede">Energy Advisor reads your tariff, indoor and outdoor temperatures and appliance activity, then sends one clear suggestion at the moment it saves you money.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#dashboard">Open dashboard</a>
+            <a class="btn btn-ghost" href="#rules">See the rules</a>
+          </div>
+        </div>
+        <div class="hero-panel card">
+          <div class="panel-head">
+            <span class="label">Alerts by hour of day</span>
+            <span class="mono muted small" id="hero-count"></span>
+          </div>
+          <div id="hour-strip" class="hour-strip" role="img" aria-label="24-hour timeline showing peak and night windows with alert markers"></div>
+          <div class="strip-legend">
+            <span><i class="sw sw-peak"></i>Peak readings (17:00–22:00)</span>
+            <span><i class="sw sw-night"></i>Night window (00:00–05:00)</span>
+          </div>
+          <div id="hero-latest"></div>
+        </div>
+      </div>
+
+      <div class="wrap section">
+        <h2 class="section-title">Three rules, each tied to a real saving</h2>
+        <div class="rule-grid" id="home-rules"></div>
+      </div>
+
+      <div class="wrap section">
+        <h2 class="section-title">How it works</h2>
+        <ol class="steps">
+          <li><span class="step-n mono">1</span><div><h3>Read the home</h3><p>Smart meter and thermostat send hourly readings: tariff period, indoor and outdoor temperature, HVAC mode, setpoints and kWh.</p></div></li>
+          <li><span class="step-n mono">2</span><div><h3>Check the rules</h3><p>Each reading is tested against the rules you have switched on. Turn a rule off and its alerts disappear.</p></div></li>
+          <li><span class="step-n mono">3</span><div><h3>Suggest one action</h3><p>You get a short message plus a tip that explains why the change helps.</p></div></li>
+          <li><span class="step-n mono">4</span><div><h3>You decide</h3><p>Accept to reschedule or adjust, or dismiss it. Your choices are remembered on this device.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="view" hidden>
+      <div class="wrap section">
+        <div class="view-head">
+          <div>
+            <p class="eyebrow">Live monitoring</p>
+            <h1 class="view-title">Dashboard</h1>
+          </div>
+          <a class="btn btn-ghost" href="#rules">Manage rules</a>
+        </div>
+        <div class="stats" id="stats"></div>
+        <div class="dash-grid">
+          <div>
+            <h2 class="block-title">Latest alert</h2>
+            <div id="latest"></div>
+          </div>
+          <div class="archive">
+            <div class="archive-head">
+              <h2 class="block-title">Alert history <span class="muted mono" id="archive-count"></span></h2>
+              <label class="search" for="search">
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                <input id="search" type="search" placeholder="Search alerts" autocomplete="off">
+              </label>
+            </div>
+            <div class="chips" id="chips" role="group" aria-label="Filter by rule"></div>
+            <div id="archive-list" class="archive-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INSIGHTS -->
+    <section id="view-insights" class="view" hidden>
+      <div class="wrap section">
+        <div class="view-head">
+          <div>
+            <p class="eyebrow">What the data shows</p>
+            <h1 class="view-title">Insights</h1>
+          </div>
+        </div>
+        <div class="insight-grid">
+          <figure class="card chart-card">
+            <figcaption><h2 class="block-title">Load at the time of each alert</h2><p class="muted small">kWh in the hour the alert fired, oldest to newest.</p></figcaption>
+            <div class="chart-scroll" id="chart-usage"></div>
+            <div class="legend" id="legend-usage"></div>
+          </figure>
+          <figure class="card chart-card">
+            <figcaption><h2 class="block-title">Indoor vs outdoor temperature</h2><p class="muted small">When the outdoor dot sits left of indoor while cooling, free cooling is available.</p></figcaption>
+            <div class="chart-scroll" id="chart-temp"></div>
+            <div class="legend"><span><i class="dot-key dot-out"></i>Outdoor</span><span><i class="dot-key dot-in"></i>Indoor</span></div>
+          </figure>
+          <figure class="card chart-card wide">
+            <figcaption><h2 class="block-title">Alerts by rule</h2></figcaption>
+            <div id="chart-rules"></div>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- RULES -->
+    <section id="view-rules" class="view" hidden>
+      <div class="wrap section narrow">
+        <div class="view-head">
+          <div>
+            <p class="eyebrow">Settings</p>
+            <h1 class="view-title">Rule management</h1>
+          </div>
+        </div>
+        <p class="muted">Switch a rule off to hide its alerts everywhere. Settings are saved in this browser.</p>
+        <div id="rule-list" class="rule-list"></div>
+        <div class="reset-row">
+          <button class="btn btn-ghost" id="reset" type="button">Reset demo</button>
+          <span class="muted small" id="reset-note" aria-live="polite"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="view-about" class="view" hidden>
+      <div class="wrap section narrow prose">
+        <p class="eyebrow">About the project</p>
+        <h1 class="view-title">Energy Advisor</h1>
+        <p>Energy Advisor is a prototype energy-saving alert center for smart homes. It turns hourly IoT readings into short, practical suggestions so a household can cut cost without giving up comfort.</p>
+        <h2>The data</h2>
+        <p>The alerts shown here are sample rows from <span class="mono">sic_IoT_test_dataset_251231.csv</span>. Each row carries a timestamp, tariff period, HVAC mode, indoor and outdoor temperature (°C), cooling and heating setpoints, and energy use in kWh.</p>
+        <h2>The rules</h2>
+        <ul id="about-rules"></ul>
+        <h2>Privacy</h2>
+        <p>Everything runs in your browser. Rule settings and your accept or dismiss choices are stored only on this device.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <span>&copy; 2026 AI Energy Advisor</span>
+      <span class="live"><i></i>Live monitoring</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
